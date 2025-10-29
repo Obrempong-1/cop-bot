@@ -1,15 +1,10 @@
-# Use official slim Python 3.11 image
+# Use slim Python image
 FROM python:3.11-slim
 
-# Set working directory inside container
+# Set working directory
 WORKDIR /app
 
-# Copy only what is needed
-COPY backend/ /app/backend/
-COPY start.sh /app/start.sh
-RUN chmod +x /app/start.sh
-
-# Install system dependencies for some Python packages
+# Install system dependencies needed for some Python packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     curl \
@@ -18,15 +13,24 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Upgrade pip
 RUN pip install --no-cache-dir --upgrade pip
 
-# Install CPU-only PyTorch and dependencies first to avoid huge builds
-RUN pip install --no-cache-dir torch==2.9.0+cpu torchvision==0.24.0+cpu -f https://download.pytorch.org/whl/torch_stable.html
-
-# Install the rest of the dependencies
+# Copy only requirements first (layer caching)
 COPY backend/requirements.txt /app/requirements.txt
+
+# Install CPU-only PyTorch and torchvision first to leverage layer caching
+RUN pip install --no-cache-dir torch==2.9.0 torchvision==0.24.0
+
+# Install other Python dependencies
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# Expose port (FastAPI default)
+# Copy backend code
+COPY backend/ /app/backend/
+
+# Copy start script and make executable
+COPY start.sh /app/start.sh
+RUN chmod +x /app/start.sh
+
+# Expose FastAPI port
 EXPOSE 8000
 
-# Set entrypoint
+# Start app
 ENTRYPOINT ["/app/start.sh"]
