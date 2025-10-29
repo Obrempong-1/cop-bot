@@ -1,5 +1,5 @@
-# Use official Python 3.11 slim image
-FROM python:3.11-slim
+# Use official PyTorch CPU image (prebuilt with Python 3.11)
+FROM pytorch/pytorch:2.9.0-cpu
 
 # Set working directory inside container
 WORKDIR /app
@@ -14,11 +14,11 @@ RUN chmod +x /app/start.sh
 # Copy requirements from backend
 COPY backend/requirements.txt /app/requirements.txt
 
-# Upgrade pip and install dependencies
+# Upgrade pip and install remaining dependencies
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r /app/requirements.txt
 
-# Expose port (if using FastAPI default)
+# Expose FastAPI default port
 EXPOSE 8000
 
 # Set entrypoint to your start.sh
