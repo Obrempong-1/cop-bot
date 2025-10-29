@@ -1,0 +1,22 @@
+# Python environments
+venv311/
+backend/.venv/
+
+# Git
+.git
+.gitignore
+
+# Python cache
+__pycache__/
+*.pyc
+
+# IDE/project files
+.idea/
+*.iml
+
+# Local env/config
+.env
+.python-version
+
+# Docker ignore itself
+.dockerignore
