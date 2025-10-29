@@ -1,0 +1,36 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Git
+.git/
+.gitignore
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.swp
+
+# Local IDE configs
+.vscode/
+.idea/
+
+# Node / frontend (if exists)
+node_modules/
+dist/
+
+# Large data or secret files you don't want in the container
+*.sqlite3
